@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { 
   Workflow, 
   Plus, 
@@ -30,10 +30,23 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 export default function Workflows() {
+  const container = useRef<HTMLDivElement>(null);
   const [viewMode, setViewViewMode] = useState<"grid" | "list">("grid");
   const [searchTerm, setSearchQuery] = useState("");
+
+  useGSAP(() => {
+    gsap.from(".wf-card", {
+      scale: 0.95,
+      opacity: 0,
+      duration: 0.5,
+      stagger: 0.05,
+      ease: "power2.out",
+    });
+  }, { scope: container, dependencies: [viewMode, searchTerm] });
 
   const handleToggleStatus = (name: string, current: string) => {
     toast.success(`Workflow "${name}" ${current === 'active' ? 'mis en pause' : 'activé'}`);
@@ -54,10 +67,10 @@ export default function Workflows() {
   );
 
   return (
-    <div className="p-6 space-y-8 animate-in">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div ref={container} className="p-6 space-y-8 animate-in">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 wf-card">
         <div>
-          <h1 className="text-3xl font-display font-bold tracking-tight">Mes Workflows</h1>
+          <h1 className="text-4xl font-display font-extrabold tracking-tight">Mes Workflows</h1>
           <p className="text-muted-foreground">Gérez et automatisez vos processus en quelques clics.</p>
         </div>
         <Button className="btn-primary rounded-xl h-10 shadow-glow">
@@ -96,7 +109,7 @@ export default function Workflows() {
 
       <div className={viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-4"}>
         {filteredWorkflows.map((wf) => (
-          <Card key={wf.id} className={`glass border-white/5 group hover:border-primary/20 transition-smooth relative overflow-hidden ${viewMode === 'list' ? 'flex flex-row items-center p-4 py-3' : ''}`}>
+          <Card key={wf.id} className={`wf-card premium-glass border-white/5 group hover:border-primary/20 transition-smooth relative overflow-hidden ${viewMode === 'list' ? 'flex flex-row items-center p-4 py-3' : ''}`}>
             {viewMode === 'grid' && (
               <div className={`absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-smooth`}>
                 <Workflow className="w-24 h-24" />
@@ -139,15 +152,15 @@ export default function Workflows() {
             <CardContent className={viewMode === 'list' ? 'p-0 flex items-center gap-8' : 'mt-6'}>
               <div className={viewMode === 'list' ? 'flex gap-8 min-w-[300px]' : 'flex items-center justify-between'}>
                 <div className="flex flex-col">
-                  <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mb-1">Trigger</span>
+                  <span className="text-[10px] text-muted-foreground uppercase font-extrabold tracking-widest mb-1">Trigger</span>
                   <div className="flex items-center gap-2">
                     <Zap className="w-3 h-3 text-primary" />
-                    <span className="text-sm font-medium">{wf.trigger}</span>
+                    <span className="text-sm font-bold">{wf.trigger}</span>
                   </div>
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mb-1">Executions</span>
-                  <span className="text-sm font-medium">{wf.executions.toLocaleString()}</span>
+                  <span className="text-[10px] text-muted-foreground uppercase font-extrabold tracking-widest mb-1">Executions</span>
+                  <span className="text-sm font-bold">{wf.executions.toLocaleString()}</span>
                 </div>
               </div>
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { 
   Zap, 
   CheckCircle2, 
@@ -11,7 +11,8 @@ import {
   MessageSquare, 
   MoreVertical,
   Play,
-  Settings
+  Settings,
+  ChevronRight
 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,8 @@ import {
   Area
 } from "recharts";
 import { toast } from "sonner";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 const data = [
   { name: "Lun", messages: 450, conversions: 12 },
@@ -48,7 +51,18 @@ const data = [
 ];
 
 export default function Dashboard() {
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const container = useRef<HTMLDivElement>(null);
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
+
+  useGSAP(() => {
+    gsap.from(".dash-card", {
+      y: 20,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.1,
+      ease: "power2.out",
+    });
+  }, { scope: container });
 
   const handleRefresh = () => {
     setIsRefreshing(true);
@@ -59,10 +73,10 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="p-6 space-y-8 animate-in">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div ref={container} className="p-6 space-y-8 animate-in">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 dash-card">
         <div>
-          <h1 className="text-3xl font-display font-bold tracking-tight">Vue d'ensemble</h1>
+          <h1 className="text-4xl font-display font-extrabold tracking-tight">Vue d'ensemble</h1>
           <p className="text-muted-foreground">Bienvenue sur votre centre de pilotage FlowBot AI.</p>
         </div>
         <div className="flex items-center gap-3">
@@ -85,19 +99,19 @@ export default function Dashboard() {
           { label: "Heures Gagnées", value: "124h", change: "+8.4%", icon: Clock, color: "text-secondary" },
           { label: "Leads Qualifiés", value: "142", change: "+15.2%", icon: Workflow, color: "text-blue-500" },
         ].map((stat, i) => (
-          <Card key={i} className="glass border-white/5 overflow-hidden group hover:border-primary/20 transition-smooth">
+          <Card key={i} className="dash-card premium-glass border-white/5 overflow-hidden group hover:border-primary/20 transition-smooth">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <div className={`w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center transition-bounce group-hover:scale-110`}>
-                  <stat.icon className={`w-5 h-5 ${stat.color}`} />
+                <div className={`w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center transition-bounce group-hover:scale-110 shadow-inner`}>
+                  <stat.icon className={`w-6 h-6 ${stat.color}`} />
                 </div>
-                <Badge variant="outline" className="bg-green-500/10 text-green-500 border-none font-bold text-[10px]">
+                <Badge variant="outline" className="bg-green-500/10 text-green-500 border-none font-bold text-[10px] rounded-full">
                   {stat.change}
                 </Badge>
               </div>
               <div>
-                <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">{stat.label}</p>
-                <h3 className="text-2xl font-display font-bold">{stat.value}</h3>
+                <p className="text-[10px] font-extrabold text-muted-foreground uppercase tracking-widest mb-1">{stat.label}</p>
+                <h3 className="text-3xl font-display font-extrabold">{stat.value}</h3>
               </div>
             </CardContent>
           </Card>
@@ -106,10 +120,10 @@ export default function Dashboard() {
 
       {/* Main Chart */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2 glass border-white/5">
+        <Card className="lg:col-span-2 dash-card premium-glass border-white/5 overflow-hidden">
           <CardHeader>
-            <CardTitle className="font-display">Activité des Workflows</CardTitle>
-            <CardDescription>Volume de messages traités les 7 derniers jours</CardDescription>
+            <CardTitle className="font-display text-2xl font-extrabold">Activité des Workflows</CardTitle>
+            <CardDescription className="font-medium">Volume de messages traités les 7 derniers jours</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-[350px] w-full">
@@ -152,10 +166,10 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="glass border-white/5">
+        <Card className="dash-card premium-glass border-white/5">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="font-display">Workflows Actifs</CardTitle>
+              <CardTitle className="font-display text-xl font-extrabold">Workflows Actifs</CardTitle>
               <Workflow className="w-4 h-4 text-muted-foreground" />
             </div>
           </CardHeader>
@@ -166,12 +180,12 @@ export default function Dashboard() {
               { name: "Relance Panier", status: "paused", executions: 432, color: "bg-zinc-500" },
               { name: "Rappel RDV", status: "active", executions: 215, color: "bg-blue-500" },
             ].map((wf, i) => (
-              <div key={i} className="flex items-center justify-between group cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <div className={`w-2 h-2 rounded-full ${wf.status === 'active' ? 'animate-pulse ' + wf.color : 'bg-zinc-500'}`} />
+              <div key={i} className="flex items-center justify-between group cursor-pointer p-2 rounded-xl hover:bg-white/5 transition-smooth">
+                <div className="flex items-center gap-4">
+                  <div className={`w-2.5 h-2.5 rounded-full ${wf.status === 'active' ? 'animate-pulse ' + wf.color : 'bg-zinc-500'}`} />
                   <div>
                     <p className="text-sm font-bold group-hover:text-primary transition-smooth">{wf.name}</p>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{wf.executions} exécutions</p>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">{wf.executions} exécutions</p>
                   </div>
                 </div>
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-smooth">
@@ -192,7 +206,7 @@ export default function Dashboard() {
       </div>
 
       {/* Recent Activity Table */}
-      <Card className="glass border-white/5">
+      <Card className="dash-card premium-glass border-white/5">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
