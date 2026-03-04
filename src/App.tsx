@@ -63,79 +63,76 @@ function AppContent() {
   }
 
   return (
-    <>
-      <div className="noise-overlay" />
-      <Routes>
-        {/* Public routes */}
-        <Route 
-          path="/" 
-          element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Landing />} 
-        />
-        <Route 
-          path="/login" 
-          element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <AuthPage mode="login" />} 
-        />
-        <Route 
-          path="/signup" 
-          element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <AuthPage mode="signup" />} 
-        />
+    <Routes>
+      {/* Public routes */}
+      <Route 
+        path="/" 
+        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Landing />} 
+      />
+      <Route 
+        path="/login" 
+        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <AuthPage mode="login" />} 
+      />
+      <Route 
+        path="/signup" 
+        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <AuthPage mode="signup" />} 
+      />
 
-        {/* Protected routes */}
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <AppLayout>
-                <Dashboard />
-              </AppLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/workflows"
-          element={
-            <ProtectedRoute>
-              <AppLayout>
-                <Workflows />
-              </AppLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/integrations"
-          element={
-            <ProtectedRoute>
-              <AppLayout>
-                <Integrations />
-              </AppLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/analytics"
-          element={
-            <ProtectedRoute>
-              <AppLayout>
-                <Analytics />
-              </AppLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/settings"
-          element={
-            <ProtectedRoute>
-              <AppLayout>
-                <Settings />
-              </AppLayout>
-            </ProtectedRoute>
-          }
-        />
+      {/* Protected routes */}
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <AppLayout>
+              <Dashboard />
+            </AppLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/workflows"
+        element={
+          <ProtectedRoute>
+            <AppLayout>
+              <Workflows />
+            </AppLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/integrations"
+        element={
+          <ProtectedRoute>
+            <AppLayout>
+              <Integrations />
+            </AppLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/analytics"
+        element={
+          <ProtectedRoute>
+            <AppLayout>
+              <Analytics />
+            </AppLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <AppLayout>
+              <Settings />
+            </AppLayout>
+          </ProtectedRoute>
+        }
+      />
 
-        {/* Catch all - redirect to home */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </>
+      {/* Catch all - redirect to home */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   )
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { 
   Database, 
   Plus, 
@@ -30,22 +30,9 @@ import {
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 
 export default function Integrations() {
-  const container = useRef<HTMLDivElement>(null);
   const [searchTerm, setSearchTerm] = useState("");
-
-  useGSAP(() => {
-    gsap.from(".int-card", {
-      y: 20,
-      opacity: 0,
-      duration: 0.5,
-      stagger: 0.05,
-      ease: "power2.out",
-    });
-  }, { scope: container, dependencies: [searchTerm] });
 
   const integrations = [
     { id: 1, provider: "WhatsApp Business", icon: MessageSquare, status: "connected", account: "+33 6 12 34 56 78", lastSync: "Il y a 5 min", color: "text-green-500", bg: "bg-green-500/10" },
@@ -68,10 +55,10 @@ export default function Integrations() {
   );
 
   return (
-    <div ref={container} className="p-6 space-y-8 animate-in">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 int-card">
+    <div className="p-6 space-y-8 animate-in">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-4xl font-display font-extrabold tracking-tight">Intégrations</h1>
+          <h1 className="text-3xl font-display font-bold tracking-tight">Intégrations</h1>
           <p className="text-muted-foreground">Connectez vos outils et canaux de communication préférés.</p>
         </div>
         <Button className="btn-primary rounded-xl h-10 shadow-glow">
@@ -82,36 +69,36 @@ export default function Integrations() {
 
       {/* Integration Status Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="int-card premium-glass border-white/5 p-6 flex items-center gap-4 hover:border-primary/20 transition-smooth">
-          <div className="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center shadow-inner">
+        <Card className="glass border-white/5 p-6 flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center">
             <CheckCircle2 className="w-6 h-6 text-green-500" />
           </div>
           <div>
-            <p className="text-3xl font-display font-extrabold">4</p>
-            <p className="text-[10px] text-muted-foreground uppercase font-extrabold tracking-widest">Connectées</p>
+            <p className="text-2xl font-display font-bold">4</p>
+            <p className="text-xs text-muted-foreground uppercase font-bold tracking-widest">Connectées</p>
           </div>
         </Card>
-        <Card className="int-card premium-glass border-white/5 p-6 flex items-center gap-4 hover:border-primary/20 transition-smooth">
-          <div className="w-12 h-12 rounded-2xl bg-orange-500/10 flex items-center justify-center shadow-inner">
+        <Card className="glass border-white/5 p-6 flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center">
             <ShieldCheck className="w-6 h-6 text-orange-500" />
           </div>
           <div>
-            <p className="text-3xl font-display font-extrabold">1</p>
-            <p className="text-[10px] text-muted-foreground uppercase font-extrabold tracking-widest">En attente</p>
+            <p className="text-2xl font-display font-bold">1</p>
+            <p className="text-xs text-muted-foreground uppercase font-bold tracking-widest">En attente</p>
           </div>
         </Card>
-        <Card className="int-card premium-glass border-white/5 p-6 flex items-center gap-4 hover:border-primary/20 transition-smooth">
-          <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center shadow-inner">
+        <Card className="glass border-white/5 p-6 flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center">
             <AlertCircle className="w-6 h-6 text-red-500" />
           </div>
           <div>
-            <p className="text-3xl font-display font-extrabold">1</p>
-            <p className="text-[10px] text-muted-foreground uppercase font-extrabold tracking-widest">En erreur</p>
+            <p className="text-2xl font-display font-bold">1</p>
+            <p className="text-xs text-muted-foreground uppercase font-bold tracking-widest">En erreur</p>
           </div>
         </Card>
       </div>
 
-      <div className="flex items-center gap-4 max-w-md group int-card">
+      <div className="flex items-center gap-4 max-w-md group">
         <div className="relative flex-1 group">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-smooth" />
           <Input 
@@ -128,11 +115,11 @@ export default function Integrations() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredIntegrations.map((int) => (
-          <Card key={int.id} className="int-card premium-glass border-white/5 group hover:border-primary/20 transition-smooth overflow-hidden">
+          <Card key={int.id} className="glass border-white/5 group hover:border-primary/20 transition-smooth overflow-hidden">
             <CardHeader className="pb-4">
               <div className="flex items-center justify-between mb-4">
-                <div className={`w-14 h-14 rounded-2xl ${int.bg} flex items-center justify-center transition-bounce group-hover:scale-110 shadow-inner`}>
-                  <int.icon className={`w-7 h-7 ${int.color}`} />
+                <div className={`w-12 h-12 rounded-xl ${int.bg} flex items-center justify-center transition-bounce group-hover:scale-110`}>
+                  <int.icon className={`w-6 h-6 ${int.color}`} />
                 </div>
                 <Badge 
                   variant="outline" 
@@ -146,15 +133,15 @@ export default function Integrations() {
                   {int.status.toUpperCase()}
                 </Badge>
               </div>
-              <CardTitle className="font-display text-2xl font-extrabold tracking-tight">{int.provider}</CardTitle>
-              <CardDescription className="flex items-center gap-2 mt-1 font-medium">
+              <CardTitle className="font-display text-xl">{int.provider}</CardTitle>
+              <CardDescription className="flex items-center gap-2 mt-1">
                 <span className="truncate max-w-[180px]">{int.account}</span>
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center justify-between text-[10px] font-extrabold uppercase tracking-widest text-muted-foreground mb-6 px-1">
+              <div className="flex items-center justify-between text-xs text-muted-foreground mb-6">
                 <span>Dernière synchro</span>
-                <span className="text-foreground">{int.lastSync}</span>
+                <span className="font-medium text-foreground">{int.lastSync}</span>
               </div>
               
               <div className="flex gap-2">
@@ -178,12 +165,12 @@ export default function Integrations() {
         ))}
 
         {/* Placeholder for new integration */}
-        <Card className="int-card border-dashed border-white/10 bg-transparent flex flex-col items-center justify-center p-8 group cursor-pointer hover:border-primary/50 transition-smooth rounded-2xl">
+        <Card className="border-dashed border-white/10 bg-transparent flex flex-col items-center justify-center p-8 group cursor-pointer hover:border-primary/50 transition-smooth">
           <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-smooth">
             <Plus className="w-8 h-8 text-muted-foreground group-hover:text-primary transition-smooth" />
           </div>
           <p className="font-bold text-muted-foreground group-hover:text-foreground">Parcourir les connecteurs</p>
-          <p className="text-[10px] text-muted-foreground mt-1 font-bold uppercase tracking-widest">50+ applications disponibles</p>
+          <p className="text-xs text-muted-foreground mt-1">50+ applications disponibles</p>
         </Card>
       </div>
     </div>
